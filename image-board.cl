@@ -1,6 +1,14 @@
 (defpackage :com.tokamach.image-board
-  (:use :common-lisp))
+  (:use :common-lisp :sqlite))
 
 (defvar *app* (make-instance 'ningle:<app>))
 
-(setf (ningle:route *app* "/"))
+;; db interaction
+(defun create-post (id parent title email message))
+(defun get-thread-from-index (index))
+
+;; creating html
+
+;; Routes
+(setf (ningle:route *app* "/")
+      "Hello fegit")
