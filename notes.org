@@ -1,0 +1,18 @@
+* image-board in common lisp
+* sql commands
+** create posts table
+CREATE TABLE Posts (id INT PRIMARY KEY NOT NULL,
+		    parent INT,
+		    title VARCHAR,
+		    email VARCHAR,
+		    message VARCHAR NOT NULL);
+
+** query thread
+SELECT * FROM Posts WHERE id=$id OR parent=$id
+
+** create new post
+INSERT INTO Posts (id, title, email, message) 
+            VALUES ($id, $title, $email, $message);
+** add post to thread
+INSERT INTO Posts (id, parent, title, email, message) 
+            VALUES ($id, $parent, $title, $email, $message);
