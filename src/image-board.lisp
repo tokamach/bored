@@ -2,6 +2,7 @@
   (:use :ningle :sqlite))
 
 (defvar *app* (make-instance 'ningle:<app>))
+(defvar *db* (connect "posts.db"))
 
 ;; db interaction
 (defun create-post (id parent title email message))
