@@ -1,6 +1,8 @@
 (declaim (optimize (debug 3)))
-(defpackage :com.tokamach.image-board
-  (:use :ningle :sqlite))
+(defpackage :image-board
+  (:use :cl :ningle :sqlite)
+  (:export :*app*))
+(in-package :image-board)
 
 (defvar *app* (make-instance 'ningle:<app>))
 (defvar *db* (sqlite:connect "posts.db"))
