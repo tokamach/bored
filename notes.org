@@ -1,4 +1,9 @@
 * image-board in common lisp
+* todo
+- switch to postgres or mysql
+- seperate into multiple files
+- image support
+- heroku
 * sql commands
 ** create posts table
 CREATE TABLE Posts (id INT PRIMARY KEY NOT NULL,
