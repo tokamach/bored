@@ -4,6 +4,7 @@
 	       :sqlite)
   :components ((:module :src
 		:components
-		((:file "image-board")
+		((:file "image-board"
+			:depends-on ("html"))
 		 (:file "html"))))
   :description "Image board software")
