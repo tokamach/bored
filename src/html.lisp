@@ -1,9 +1,10 @@
 (declaim (optimize (debug 3)))
+(defpackage :image-board
+  (:use :cl :ningle :sqlite :cl-ppcre)
+  (:export :*app*))
 (in-package :image-board)
 
-;; creating html
-(defun surround-with-html-preamble (str)
-  (format nil "
+(defconstant +HTML-STRING+ "
 <html>
     <head>
 	<meta charset=\"UTF-8\"> 
@@ -33,12 +34,22 @@
 	     font-family: 'PT Mono', monospace;
 	     font-size: 13;
 	 }
+
+         a {
+	     font-family: 'PT Mono', monospace;
+             text-decoration: none;
+             color: black;
+         }
 	</style>
     </head>
     <body>
         ~A
     </body>
-</html>" str))
+</html>")
+
+;; creating html
+(defun surround-with-html-preamble (str)
+  (format nil +HTML-STRING+ str))
 
 (defun generate-error-html (error-string)
   "Generate a HTML page signalling an error"
@@ -50,12 +61,14 @@
 	       "<div>"
 	       (format nil "<h3>~D ~A<br>~A</h3>" (post-id a-post) (post-name a-post) "PLACEHOLDER DATE")
 	       (format nil "<p>~A</p>" (regex-replace-all "\\n" (post-message a-post) "<br>"))
+	       (if (equalp nil (post-parent a-post)) (format nil "<u><a href=/thread/~A>view thread</a></u>" (post-id a-post)))
 	       "</div>"))
 
 (defun generate-thread-html (list-of-posts)
   "Generate a HTML page from a list of posts" 
   (surround-with-html-preamble (apply #'concatenate 'string (mapcar #'generate-post-html-div list-of-posts))))
 
+;; todo generate proper catalog
 (defun generate-catalog-html ()
   (surround-with-html-preamble
    (generate-thread-html (make-catalog-list))))
