@@ -2,9 +2,9 @@
   :depends-on (:ningle
 	       :clack
 	       :sqlite)
+  :serial t
   :components ((:module :src
-		:components
-		((:file "image-board"
-			:depends-on ("html"))
-		 (:file "html"))))
+			:components
+			((:file "html")
+			 (:file "image-board"))))
   :description "Image board software")
