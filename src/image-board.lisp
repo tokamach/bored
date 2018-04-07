@@ -58,5 +58,5 @@
 		(name    (cdr (assoc "name" params :test #'equalp)))
 		(message (cdr (assoc "message" params :test #'equalp))))
 	    (create-post (make-post-boa *next-post-id* id name message))
-	    `'(302 (:location ,(format nil "/thread/~D" id))))))
+	    `(302 (:location ,(format nil "/thread/~D" id))))))
 
