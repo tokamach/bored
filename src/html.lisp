@@ -4,8 +4,8 @@
   (:export :*app*))
 (in-package :image-board)
 
-(defconstant +HTML-STRING+ "
-<html>
+(defconstant +HTML-STRING+
+"<html>
     <head>
 	<meta charset=\"UTF-8\"> 
 	<title>Image Board</title>
@@ -44,6 +44,11 @@
     </head>
     <body>
         ~A
+	<form class=\"postbox\" method=\"post\">
+	    <input type=\"text\" name=\"message\" class=\"messagebox\" autocomplete=\"off\" />
+	    <input type=\"text\" name=\"name\" class=\"namebox\" autocomplete=\"off\" />
+	    <input type=\"submit\" class=\"submit-button\" value=\"Post\" />
+	</form>
     </body>
 </html>")
 
