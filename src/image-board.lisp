@@ -7,6 +7,8 @@
 (defvar *app* (make-instance 'ningle:<app>))
 (defvar *db* (sqlite:connect "/Users/tom/code/lisp/image-board/posts.db"))
 
+(defvar *next-post-id* (1+ (sqlite:execute-single *db* "SELECT MAX(id) FROM Posts;")))
+
 ;; One post, if parent=nil then this is a thread
 (defstruct (post (:constructor make-post-boa (id parent name message)))
   id parent name message)
@@ -31,7 +33,8 @@
    (post-id a-post)
    (post-parent a-post)
    (post-name a-post)
-   (post-message a-post)))
+   (post-message a-post))
+  (incf *next-post-id*))
 
 (defun delete-post (id)
   (sqlite:execute-non-query *db*
@@ -39,16 +42,21 @@
 
 ;; Routes
 (setf (ningle:route *app* "/")
-      (generate-catalog-html))
+      #'(lambda (params)
+	  (generate-catalog-html)))
+
+(setf (ningle:route *app* "/" :method :POST)
+      "FUCK")
 
 (setf (ningle:route *app* "/thread/:id" :method :GET)
       #'(lambda (params)
 	  (generate-thread-html (make-post-list-from-parent (parse-integer (cdr (assoc :id params)))))))
-#|
+
 (setf (ningle:route *app* "/thread/:id" :method :POST)
       #'(lambda (params)
-	  (let ((req (lack.request:request-query-parameters ningle:*request*))
-		(id (cdr (assoc :id params))))
-	    (create-post id (assoc :parent req) (assoc :title req) (assoc :email req) (assoc :message req)))
-	  (create-post ((cdr (assoc :id params))))))
-|#
+	  (let ((id      (cdr (assoc :id params)))
+		(name    (cdr (assoc "name" params :test #'equalp)))
+		(message (cdr (assoc "message" params :test #'equalp))))
+	    (create-post (make-post-boa *next-post-id* id name message))
+	    `'(302 (:location ,(format nil "/thread/~D" id))))))
+
