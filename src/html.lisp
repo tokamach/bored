@@ -15,10 +15,11 @@
 	     /*background: url('file:///Users/tom/code/lisp/image-board/html/bg.png');*/
              background: grey;
 	 }
-	 div {
+	 div.post {
 	     max-width: 400px;
 	     background: white;
 	     padding: 10px;
+             margin: auto;
 	     margin-bottom: 10px;
 	 }
 
@@ -45,7 +46,7 @@
 	     margin-bottom: 0px;
 	 }
 
-	 input.message-box {
+	 textarea.message-box {
 	     font-family: 'PT Mono', monospace;
 	     font-size: 13;
 	     width: 400px;
@@ -63,13 +64,8 @@
 	</style>
     </head>
     <body>
-        ~A
         <div>
-	<form class=\"postbox\" method=\"post\">
-	    <input type=\"textarea\" name=\"name\" class=\"name-box\" autocomplete=\"off\" />
-	    <input type=\"submit\" class=\"submit-button\" value=\"Post\" />
-	    <input type=\"textarea\" name=\"message\" class=\"message-box\" autocomplete=\"off\" />
-	</form>
+        ~A
         </div>
     </body>
 </html>")
@@ -85,7 +81,7 @@
 (defun generate-post-html-div (a-post)
   "Generate a HTML string from a post struct"
   (concatenate 'string
-	       "<div>"
+	       "<div class=\"post\">"
 	       (format nil "<h3>~D ~A<br>~A</h3>" (post-id a-post) (post-name a-post) (convert-universal-to-timestamp (parse-integer (post-time a-post))))
 	       (format nil "<p>~A</p>" (regex-replace-all "\\n" (post-message a-post) "<br>"))
 	       (format nil "<u><a href=\"/delete/~D\">delete</a></u> " (post-id a-post))
@@ -94,9 +90,19 @@
 
 (defun generate-thread-html (list-of-posts)
   "Generate a HTML page from a list of posts" 
-  (surround-with-html-preamble (apply #'concatenate 'string (mapcar #'generate-post-html-div list-of-posts))))
+  (surround-with-html-preamble
+   (concatenate 'string
+		(apply #'concatenate 'string (mapcar #'generate-post-html-div list-of-posts))
+                "<div class=\"post\">
+                     <form class=\"postbox\" method=\"post\">
+                         <input type=\"textarea\" name=\"name\" class=\"name-box\" autocomplete=\"off\" />
+                         <input type=\"submit\" class=\"submit-button\" value=\"Post\" />
+                         <textarea rows=\"10\" name=\"message\" class=\"message-box\" autocomplete=\"off\"></textarea>
+                     </form>
+                 </div>")))
 
 ;; todo generate proper catalog
 (defun generate-catalog-html ()
-  (surround-with-html-preamble
-   (generate-thread-html (make-catalog-list))))
+  (surround-with-html-preamble 
+   (let ((catl (make-catalog-list)))
+     (apply #'concatenate 'string (mapcar #'generate-post-html-div catl)))))
