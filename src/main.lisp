@@ -1,6 +1,4 @@
-(defpackage :bored
-  (:use :cl :ningle :cl-ppcre :clack.builder :clack.middleware.static)
-  (:export :*app*))
+(declaim (optimize (debug 3)))
 (in-package :bored)
 
 (defvar *app* (make-instance 'ningle:<app>))
@@ -9,10 +7,10 @@
 (defun start ()
   (setf *server*
 	(clack:clackup
-	 (builder
-	  (<clack-middleware-static>
-	   :path "/asset"
-	   :root (make-pathname :directory '(:relative "asset")))
+	 (lack:builder
+	  (:static
+	   :path "/asset/"
+	   :root (make-pathname :directory "/Users/tom/code/lisp/bored/asset/"))
 	  *app*))))
 
 (defun stop ()
@@ -23,12 +21,10 @@
       #'(lambda (params)
 	  (generate-catalog-html)))
 
-(setf (ningle:route *app* "/" :method :POST)
-      "FUCK")
-
 (setf (ningle:route *app* "/thread/:id" :method :GET)
       #'(lambda (params)
-	  (generate-thread-html (make-post-list-from-parent (parse-integer (cdr (assoc :id params)))))))
+	  (generate-thread-html
+	   (make-post-list-from-parent (parse-integer (cdr (assoc :id params)))))))
 
 (setf (ningle:route *app* "/thread/:id" :method :POST)
       #'(lambda (params)

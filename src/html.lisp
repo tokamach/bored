@@ -1,6 +1,4 @@
 (declaim (optimize (debug 3)))
-(defpackage :bored
-  (:use :cl :ningle :sqlite :cl-ppcre))
 (in-package :bored)
 
 (defconstant +HTML-STRING+
@@ -69,6 +67,12 @@
     </body>
 </html>")
 
+(defun convert-universal-to-timestamp (time)
+  (multiple-value-bind
+	(second minute hour day month year)
+      (decode-universal-time time)
+    (format nil "~A-~A-~D ~A:~A:~A" year month day hour minute second)))
+
 ;; creating html
 (defun surround-with-html-preamble (str)
   (format nil +HTML-STRING+ str))
@@ -81,7 +85,10 @@
   "Generate a HTML string from a post struct"
   (concatenate 'string
 	       "<div class=\"post\">"
-	       (format nil "<h3>~D ~A<br>~A</h3>" (post-id a-post) (post-name a-post) (convert-universal-to-timestamp (parse-integer (post-time a-post))))
+	       (format nil "<h3>~D ~A<br>~A</h3>"
+		       (post-id a-post)
+		       (post-name a-post)
+		       (convert-universal-to-timestamp (parse-integer (post-time a-post))))
 	       (format nil "<p>~A</p>" (regex-replace-all "\\n" (post-message a-post) "<br>"))
 	       (format nil "<u><a href=\"/delete/~D\">delete</a></u> " (post-id a-post))
 	       (if (equalp nil (post-parent a-post)) (format nil "<u><a href=/thread/~A>view thread</a></u>" (post-id a-post)))

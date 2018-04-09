@@ -1,6 +1,4 @@
 (declaim (optimize (debug 3)))
-(defpackage :bored
-  (:use :cl :ningle :sqlite :cl-ppcre))
 (in-package :bored)
 
 (defvar *db* (sqlite:connect "/Users/tom/code/lisp/bored/posts.db"))
@@ -36,10 +34,4 @@
 
 (defun delete-post (id)
   (sqlite:execute-non-query *db* "DELETE FROM Posts WHERE id=?;" id))
-
-(defun convert-universal-to-timestamp (time)
-  (multiple-value-bind
-	(second minute hour day month year)
-      (decode-universal-time time)
-    (format nil "~A-~A-~D ~A:~A:~A" year month day hour minute second)))
 
