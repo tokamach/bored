@@ -1,23 +1,24 @@
 * image-board in common lisp
 * todo
 - switch to postgres or mysql
-- seperate into multiple files
+- add a db option to use s-expressions in plaintext using `read` and `print`
+- stop using structs and use CLOS
 - image support
 - heroku
 * sql commands
 ** create posts table
 CREATE TABLE Posts (id INT PRIMARY KEY NOT NULL,
 		    parent INT,
-		    title VARCHAR,
-		    email VARCHAR,
+		    name VARCHAR,
+		    time VARCHAR,
 		    message VARCHAR NOT NULL);
 
 ** query thread
 SELECT * FROM Posts WHERE id=$id OR parent=$id
 
 ** create new post
-INSERT INTO Posts (id, title, email, message) 
-            VALUES ($id, $title, $email, $message);
+INSERT INTO Posts (id, parent, name, time, message) 
+            VALUES ($id, $parent, $name, $time, $message);
 ** add post to thread
-INSERT INTO Posts (id, parent, title, email, message) 
-            VALUES ($id, $parent, $title, $email, $message);
+INSERT INTO Posts (id, parent, title, name, time, message) 
+            VALUES ($id, $parent, $name, $time, $message);
