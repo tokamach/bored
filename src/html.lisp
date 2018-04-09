@@ -86,7 +86,7 @@
   "Generate a HTML string from a post struct"
   (concatenate 'string
 	       "<div>"
-	       (format nil "<h3>~D ~A<br>~A</h3>" (post-id a-post) (post-name a-post) "PLACEHOLDER DATE")
+	       (format nil "<h3>~D ~A<br>~A</h3>" (post-id a-post) (post-name a-post) (post-time a-post))
 	       (format nil "<p>~A</p>" (regex-replace-all "\\n" (post-message a-post) "<br>"))
 	       (format nil "<u><a href=\"/delete/~D\">delete</a></u> " (post-id a-post))
 	       (if (equalp nil (post-parent a-post)) (format nil "<u><a href=/thread/~A>view thread</a></u>" (post-id a-post)))

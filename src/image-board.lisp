@@ -10,8 +10,8 @@
 (defvar *next-post-id* (1+ (sqlite:execute-single *db* "SELECT MAX(id) FROM Posts;")))
 
 ;; One post, if parent=nil then this is a thread
-(defstruct (post (:constructor make-post-boa (id parent name message)))
-  id parent name message)
+(defstruct (post (:constructor make-post-boa (id parent name time message)))
+  id parent name time message)
 
 (defun make-post-from-id (id)
   (let ((dbres (multiple-value-list (sqlite:execute-one-row-m-v *db* "SELECT * FROM Posts WHERE id=?;" id))))
@@ -29,10 +29,11 @@
 (defun create-post (a-post)
   (sqlite:execute-non-query
    *db*
-   "INSERT INTO Posts (id, parent, name, message) VALUES (?, ?, ?, ?);"
+   "INSERT INTO Posts (id, parent, name, time, message) VALUES (?, ?, ?, ?, ?);"
    (post-id a-post)
    (post-parent a-post)
    (post-name a-post)
+   (post-time a-post)
    (post-message a-post))
   (incf *next-post-id*))
 
@@ -57,7 +58,7 @@
 	  (let ((id      (cdr (assoc :id params)))
 		(name    (cdr (assoc "name" params :test #'equalp)))
 		(message (cdr (assoc "message" params :test #'equalp))))
-	    (create-post (make-post-boa *next-post-id* id name message))
+	    (create-post (make-post-boa *next-post-id* id name (get-universal-time) message))
 	    `(302 (:location ,(format nil "/thread/~D" id))))))
 
 (setf (ningle:route *app* "/delete/:id" :method :GET)
