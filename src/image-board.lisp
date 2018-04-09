@@ -38,8 +38,13 @@
   (incf *next-post-id*))
 
 (defun delete-post (id)
-  (sqlite:execute-non-query *db*
-   "DELETE FROM Posts WHERE id=?;" id))
+  (sqlite:execute-non-query *db* "DELETE FROM Posts WHERE id=?;" id))
+
+(defun convert-universal-to-timestamp (time)
+  (multiple-value-bind
+	(second minute hour day month year)
+      (decode-universal-time time)
+    (format nil "~A-~A-~D ~A:~A:~A" year month day hour minute second)))
 
 ;; Routes
 (setf (ningle:route *app* "/")
