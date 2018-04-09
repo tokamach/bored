@@ -40,15 +40,37 @@
              text-decoration: none;
              color: black;
          }
+
+	 form {
+	     margin-bottom: 0px;
+	 }
+
+	 input.message-box {
+	     font-family: 'PT Mono', monospace;
+	     font-size: 13;
+	     width: 400px;
+	 }
+
+	 input.submit-button {
+	     background: white;
+	     border: 5px;
+	     border-color: black;
+	     text-align: center;
+	     font-family: 'PT Mono', monospace;
+	     font-size: 13;
+	 }
+
 	</style>
     </head>
     <body>
         ~A
+        <div>
 	<form class=\"postbox\" method=\"post\">
-	    <input type=\"text\" name=\"message\" class=\"messagebox\" autocomplete=\"off\" />
-	    <input type=\"text\" name=\"name\" class=\"namebox\" autocomplete=\"off\" />
+	    <input type=\"textarea\" name=\"name\" class=\"name-box\" autocomplete=\"off\" />
 	    <input type=\"submit\" class=\"submit-button\" value=\"Post\" />
+	    <input type=\"textarea\" name=\"message\" class=\"message-box\" autocomplete=\"off\" />
 	</form>
+        </div>
     </body>
 </html>")
 
@@ -66,6 +88,7 @@
 	       "<div>"
 	       (format nil "<h3>~D ~A<br>~A</h3>" (post-id a-post) (post-name a-post) "PLACEHOLDER DATE")
 	       (format nil "<p>~A</p>" (regex-replace-all "\\n" (post-message a-post) "<br>"))
+	       (format nil "<u><a href=\"/delete/~D\">delete</a></u> " (post-id a-post))
 	       (if (equalp nil (post-parent a-post)) (format nil "<u><a href=/thread/~A>view thread</a></u>" (post-id a-post)))
 	       "</div>"))
 

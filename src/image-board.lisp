@@ -60,3 +60,10 @@
 	    (create-post (make-post-boa *next-post-id* id name message))
 	    `(302 (:location ,(format nil "/thread/~D" id))))))
 
+(setf (ningle:route *app* "/delete/:id" :method :GET)
+      #'(lambda (params)
+	  (let ((parent (post-parent (make-post-from-id (cdr (assoc :id params)))))
+		(id (cdr (assoc :id params))))
+	    (unless (equalp parent nil)
+	      (delete-post id))
+	    `(302 (:location ,(format nil "/thread/~D" parent))))))
