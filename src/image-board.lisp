@@ -1,12 +1,9 @@
 (declaim (optimize (debug 3)))
-(defpackage :image-board
-  (:use :cl :ningle :sqlite :cl-ppcre)
-  (:export :*app*))
-(in-package :image-board)
+(defpackage :bored
+  (:use :cl :ningle :sqlite :cl-ppcre))
+(in-package :bored)
 
-(defvar *app* (make-instance 'ningle:<app>))
-(defvar *db* (sqlite:connect "/Users/tom/code/lisp/image-board/posts.db"))
-
+(defvar *db* (sqlite:connect "/Users/tom/code/lisp/bored/posts.db"))
 (defvar *next-post-id* (1+ (sqlite:execute-single *db* "SELECT MAX(id) FROM Posts;")))
 
 ;; One post, if parent=nil then this is a thread
@@ -46,30 +43,3 @@
       (decode-universal-time time)
     (format nil "~A-~A-~D ~A:~A:~A" year month day hour minute second)))
 
-;; Routes
-(setf (ningle:route *app* "/")
-      #'(lambda (params)
-	  (generate-catalog-html)))
-
-(setf (ningle:route *app* "/" :method :POST)
-      "FUCK")
-
-(setf (ningle:route *app* "/thread/:id" :method :GET)
-      #'(lambda (params)
-	  (generate-thread-html (make-post-list-from-parent (parse-integer (cdr (assoc :id params)))))))
-
-(setf (ningle:route *app* "/thread/:id" :method :POST)
-      #'(lambda (params)
-	  (let ((id      (cdr (assoc :id params)))
-		(name    (cdr (assoc "name" params :test #'equalp)))
-		(message (cdr (assoc "message" params :test #'equalp))))
-	    (create-post (make-post-boa *next-post-id* id name (get-universal-time) message))
-	    `(302 (:location ,(format nil "/thread/~D" id))))))
-
-(setf (ningle:route *app* "/delete/:id" :method :GET)
-      #'(lambda (params)
-	  (let ((parent (post-parent (make-post-from-id (cdr (assoc :id params)))))
-		(id (cdr (assoc :id params))))
-	    (unless (equalp parent nil)
-	      (delete-post id))
-	    `(302 (:location ,(format nil "/thread/~D" parent))))))

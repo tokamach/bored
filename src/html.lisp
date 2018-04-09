@@ -1,19 +1,18 @@
 (declaim (optimize (debug 3)))
-(defpackage :image-board
-  (:use :cl :ningle :sqlite :cl-ppcre)
-  (:export :*app*))
-(in-package :image-board)
+(defpackage :bored
+  (:use :cl :ningle :sqlite :cl-ppcre))
+(in-package :bored)
 
 (defconstant +HTML-STRING+
 "<html>
     <head>
 	<meta charset=\"UTF-8\"> 
-	<title>Image Board</title>
+	<title>Bored</title>
 	<style>
 	 @import url('https://fonts.googleapis.com/css?family=PT+Mono');
 	 body {
-	     /*background: url('file:///Users/tom/code/lisp/image-board/html/bg.png');*/
-             background: grey;
+	     background: url('/asset/bg.png');
+             /*background: grey;*/
 	 }
 	 div.post {
 	     max-width: 400px;

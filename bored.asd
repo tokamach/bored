@@ -1,4 +1,4 @@
-(asdf:defsystem image-board
+(asdf:defsystem bored
   :depends-on (:ningle
 	       :clack
 	       :sqlite)
@@ -6,5 +6,6 @@
   :components ((:module :src
 			:components
 			((:file "html")
-			 (:file "image-board"))))
+			 (:file "image-board")
+			 (:file "main"))))
   :description "Image board software")
