@@ -1,7 +1,7 @@
 (declaim (optimize (debug 3)))
 (in-package :bored)
 
-(defconstant +HTML-STRING+
+(defparameter +HTML-STRING+
 "<html>
     <head>
 	<meta charset=\"UTF-8\"> 
@@ -47,6 +47,8 @@
 	     font-family: 'PT Mono', monospace;
 	     font-size: 13;
 	     width: 400px;
+	     max-width: 400px;
+             resize: vertical;
 	 }
 
 	 input.submit-button {
@@ -81,7 +83,7 @@
   "Generate a HTML page signalling an error"
   (format nil "<h1>Error: ~A</h1>" error-string))
 
-(defun generate-post-html-div (a-post)
+(defun generate-post-html (a-post)
   "Generate a HTML string from a post struct"
   (concatenate 'string
 	       "<div class=\"post\">"
@@ -98,7 +100,7 @@
   "Generate a HTML page from a list of posts" 
   (surround-with-html-preamble
    (concatenate 'string
-		(apply #'concatenate 'string (mapcar #'generate-post-html-div list-of-posts))
+		(apply #'concatenate 'string (mapcar #'generate-post-html list-of-posts))
                 "<div class=\"post\">
                      <form class=\"postbox\" method=\"post\">
                          <input type=\"textarea\" name=\"name\" class=\"name-box\" autocomplete=\"off\" />
@@ -111,4 +113,12 @@
 (defun generate-catalog-html ()
   (surround-with-html-preamble 
    (let ((catl (make-catalog-list)))
-     (apply #'concatenate 'string (mapcar #'generate-post-html-div catl)))))
+     (concatenate 'string
+		  (apply #'concatenate 'string (mapcar #'generate-post-html catl))
+		  "<div class=\"post\">
+                       <form class=\"postbox\" method=\"post\" action=\"/create/\">
+                           <input type=\"textarea\" name=\"name\" class=\"name-box\" autocomplete=\"off\" />
+                           <input type=\"submit\" class=\"submit-button\" value=\"Post\" />
+                           <textarea rows=\"10\" name=\"message\" class=\"message-box\" autocomplete=\"off\"></textarea>
+                       </form>
+                   </div>"))))

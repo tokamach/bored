@@ -34,6 +34,14 @@
 	    (create-post (make-post-boa *next-post-id* id name (get-universal-time) message))
 	    `(302 (:location ,(format nil "/thread/~D" id))))))
 
+(setf (ningle:route *app* "/create/" :method :POST)
+		    #'(lambda (params)
+			(let* ((name    (cdr (assoc "name" params :test #'equalp)))
+			       (message (cdr (assoc "message" params :test #'equalp)))
+			       (post    (make-post-boa *next-post-id* nil name (get-universal-time) message)))
+			  (create-post post)
+			  `(302 (:location ,(format nil "/thread/~D" (post-id post)))))))
+
 (setf (ningle:route *app* "/delete/:id" :method :GET)
       #'(lambda (params)
 	  (let ((parent (post-parent (make-post-from-id (cdr (assoc :id params)))))
