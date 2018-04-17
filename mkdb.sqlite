@@ -1,0 +1,14 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE Posts (id INT PRIMARY KEY NOT NULL, parent INT, name VARCHAR, time VARCHAR, message VARCHAR NOT NULL);
+INSERT INTO "Posts" VALUES(0,NULL,'anon','0','first post losers');
+INSERT INTO "Posts" VALUES(2,0,'idk','3732285003','testing 123');
+INSERT INTO "Posts" VALUES(4,0,'patchy','3732477498','you should really read a book
+<code>
+(defun f (x)
+  (+ x x))
+</code>');
+INSERT INTO "Posts" VALUES(5,NULL,'another thread','3732873747','making thread #2 here boyos');
+INSERT INTO "Posts" VALUES(6,5,'anon','3732873770','good job');
+INSERT INTO "Posts" VALUES(7,5,'','3732873796','i have no name');
+COMMIT;
