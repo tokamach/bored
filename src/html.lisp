@@ -1,4 +1,4 @@
-(declaim (optimize (debug 3)))
+;; (declaim (optimize (debug 3)))
 (in-package :bored)
 
 (defparameter +HTML-STRING+
@@ -12,12 +12,21 @@
 	     background: url('/asset/bg.png');
              /*background: grey;*/
 	 }
-	 div.post {
+	 div.post-container {
 	     max-width: 400px;
 	     background: white;
 	     padding: 10px;
              margin: auto;
 	     margin-bottom: 10px;
+          /* height: -moz-fit-content */
+             display: flow-root;
+	 }
+
+	 img.post-image {
+	     float: left;
+	     max-height: 255px;
+	     max-width: 255px;
+	     margin-right: 15px; 
 	 }
 
 	 h3 {
@@ -86,7 +95,7 @@
 (defun generate-post-html (a-post)
   "Generate a HTML string from a post struct"
   (concatenate 'string
-	       "<div class=\"post\">"
+	       "<div class=\"post-container\">"
 	       (format nil "<h3>~D ~A<br>~A</h3>"
 		       (post-id a-post)
 		       (post-name a-post)
@@ -101,7 +110,7 @@
   (surround-with-html-preamble
    (concatenate 'string
 		(apply #'concatenate 'string (mapcar #'generate-post-html list-of-posts))
-                "<div class=\"post\">
+                "<div class=\"post-container\">
                      <form class=\"postbox\" method=\"post\">
                          <input type=\"textarea\" name=\"name\" class=\"name-box\" autocomplete=\"off\" />
                          <input type=\"submit\" class=\"submit-button\" value=\"Post\" />
@@ -115,10 +124,10 @@
    (let ((catl (make-catalog-list)))
      (concatenate 'string
 		  (apply #'concatenate 'string (mapcar #'generate-post-html catl))
-		  "<div class=\"post\">
+		  "<div class=\"post-container\">
                        <form class=\"postbox\" method=\"post\" action=\"/create/\">
                            <input type=\"textarea\" name=\"name\" class=\"name-box\" autocomplete=\"off\" />
-                           <input type=\"submit\" class=\"submit-button\" value=\"Post\" />
+                           <input type=\"submit\" class=\"submit-button\" value=\"make new thread\" />
                            <textarea rows=\"10\" name=\"message\" class=\"message-box\" autocomplete=\"off\"></textarea>
                        </form>
                    </div>"))))

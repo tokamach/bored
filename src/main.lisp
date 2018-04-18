@@ -1,4 +1,4 @@
-(declaim (optimize (debug 3)))
+;; (declaim (optimize (debug 3)))
 (in-package :bored)
 
 (defvar *app* (make-instance 'ningle:<app>))

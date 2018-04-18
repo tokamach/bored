@@ -1,4 +1,4 @@
-(declaim (optimize (debug 3)))
+;; (declaim (optimize (debug 3)))
 (in-package :bored)
 
 (defvar *db* (sqlite:connect "/Users/tom/code/lisp/bored/posts.db"))
