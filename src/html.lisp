@@ -1,13 +1,8 @@
 ;; (declaim (optimize (debug 3)))
 (in-package :bored)
 
-(defparameter +HTML-STRING+
-"<html>
-    <head>
-	<meta charset=\"UTF-8\"> 
-	<title>Bored</title>
-	<style>
-	 @import url('https://fonts.googleapis.com/css?family=PT+Mono');
+(defparameter +STYLE-STRING-A+
+  "@import url('https://fonts.googleapis.com/css?family=PT+Mono');
 	 body {
 	     background: url('/asset/bg.png');
              /*background: grey;*/
@@ -67,12 +62,114 @@
 	     text-align: center;
 	     font-family: 'PT Mono', monospace;
 	     font-size: 13;
-	 }
+	 }")
 
+(defparameter +STYLE-STRING-B+
+  "@import url('https://fonts.googleapis.com/css?family=EB+Garamond');
+
+.container {
+    /*padding: 5% 0;
+    display:flex;justify-content:center;align-items:center;*/
+    background-color: #b7e1ea;
+}
+
+div.post-container {
+    display: flow-root;
+
+    max-width: 400px;
+
+    border-style: solid;
+    border-width: 10px;
+    border-color: #888888;
+
+    border-top-width: 25px;
+    border-top-style: solid;
+
+    background-color: #dddddd;
+
+    margin: auto;
+    margin-bottom: 20px;
+    padding: 20px;
+
+    box-shadow: 10px 10px #333333;
+}
+
+hr {
+    color: #aaaaaa;
+}
+
+p.indent {
+    margin-left: 10%;
+    max-width: 350px;
+}
+
+ul {
+    list-style-type: none;
+    float: left;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: 18px;
+    margin-right: 18px;
+}
+
+a {
+    color:#000000;
+}
+
+textarea.message-box {
+    background: #dddddd;
+    border: 5px;
+    border-style: solid;
+    border-color: #bbbbbb;
+
+    font-family: 'PT Mono', monospace;
+    font-size: 13;
+
+    width: 400px;
+    max-width: 400px;
+    resize: vertical;
+}
+
+input.name-box {
+    background: #dddddd;
+    border: 5px;
+    border-style: solid;
+    border-color: #bbbbbb;
+
+    font-family: 'PT Mono', monospace;
+    font-size: 13;
+}
+
+input.submit-button {
+    background: #dddddd;
+    border: 5px;
+    border-style: solid;
+    border-color: #bbbbbb;
+
+    text-align: center;
+    font-family: 'PT Mono', monospace;
+    font-size: 13;
+}
+
+body {
+    font-family: 'EB Garamond', serif;
+    /*background: url(img/dots.png) repeat center center fixed;*/
+    background: #B7E1EA;
+    font-size: 12pt;
+}
+")
+
+(defparameter +HTML-STRING+
+  "<html>
+    <head>
+	<meta charset=\"UTF-8\"> 
+	<title>Bored</title>
+	<style>
+	 ~A
 	</style>
     </head>
     <body>
-        <div>
+        <div class=\"container\">
         ~A
         </div>
     </body>
@@ -86,7 +183,7 @@
 
 ;; creating html
 (defun surround-with-html-preamble (str)
-  (format nil +HTML-STRING+ str))
+  (format nil +HTML-STRING+ +STYLE-STRING-B+ str))
 
 (defun generate-error-html (error-string)
   "Generate a HTML page signalling an error"
