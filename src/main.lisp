@@ -14,7 +14,7 @@
 	  *app*))))
 
 (defun stop ()
-  (clack:stop *server*))
+  (clack:stop))
 
 ;; Routes
 (setf (ningle:route *app* "/")
